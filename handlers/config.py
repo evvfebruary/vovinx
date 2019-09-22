@@ -1,18 +1,18 @@
 import os
 import psutil
 from handlers.io_handlers import open_io
-
-default_config = {
-    "address": '0.0.0.0',
-    "port": 80,
-    "queue": 8,
-    "datasize": 1024,
-    "cpu_count": psutil.cpu_count(),
-    "document_root": "/server/"
-}
+from handlers.logger import logger
 
 
 def read_config(config_path):
+    default_config = {
+        "address": '0.0.0.0',
+        "port": 80,
+        "queue": 8,
+        "datasize": 1024,
+        "cpu_count": psutil.cpu_count(),
+        "document_root": "/server/"
+    }
     file_existed = os.path.exists(config_path)
     if not file_existed:
         raise ValueError(f"Missed config on {config_path}")
@@ -28,4 +28,5 @@ def read_config(config_path):
             default_config.update({key: value})
     default_config["binding"] = (default_config["address"], default_config["port"])
     default_config["cpu_limit"] = int(default_config["cpu_limit"])
+    logger.info(f"Config: {default_config}")
     return default_config
