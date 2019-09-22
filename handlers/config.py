@@ -23,7 +23,7 @@ def read_config(config_path):
         for only_values in line.split("#")[:-1]:
             try:
                 key, value = [value for value in only_values.split(" ") if len(value) >= 1]
-                logger.info("Config update: {key} : {'value'}")
+                logger.info(f"Config update: {key} : {'value'}")
             except ValueError as config_error:
                 raise ValueError("Wrong config format")
             default_config.update({key: value})
