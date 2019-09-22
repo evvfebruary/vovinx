@@ -20,9 +20,16 @@ def read_config(config_path):
     if error:
         raise ValueError(f"Read file error:  {config_path}")
     for line in config_raw.decode("utf-8").split("\n"):
-        for only_values in line.split("#")[:-1]:
+        if "#" in line:
+            for only_values in line.split("#")[:-1]:
+                try:
+                    key, value = [value for value in only_values.split(" ") if len(value) >= 1]
+                    logger.info(f"Config update: {key} : {'value'}")
+                except ValueError as config_error:
+                    raise ValueError("Wrong config format")
+        else:
             try:
-                key, value = [value for value in only_values.split(" ") if len(value) >= 1]
+                key, value = [value for value in line.split(" ") if len(value) >= 1]
                 logger.info(f"Config update: {key} : {'value'}")
             except ValueError as config_error:
                 raise ValueError("Wrong config format")
