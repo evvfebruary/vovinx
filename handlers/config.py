@@ -19,7 +19,8 @@ def read_config(config_path):
     config_raw, error = open_io(config_path)
     if error:
         raise ValueError(f"Read file error:  {config_path}")
-    for line in config_raw.decode("utf-8").split("\n"):
+
+    for line in [cnf_line for cnf_line in config_raw.decode("utf-8").split("\n") if len(cnf_line) > 2]:
         if "#" in line:
             for only_values in line.split("#")[:-1]:
                 try:
