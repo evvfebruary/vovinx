@@ -52,6 +52,7 @@ class Server:
 
     def handle_request(self, request):
         filepath = os.path.normpath(self.root + request.path)
+        logger.info(f"Filepath {filepath}")
         # Prefix check
         if os.path.commonprefix([self.root, filepath]) != self.root:
             return self.answers["FORBIDDEN"]
