@@ -10,9 +10,8 @@ def request_handler(input_request):
     logger.info(f"Input raw request {input_request} \n")
     request_body = input_request.decode('utf-8')
     request_by_string = request_body.split(" ")
-    validate = True if len(request_by_string) >= 3 else False # Minimum length ( head example )
+    validate = True if len(request_by_string) >= 3 else False  # Minimum length ( head example )
     if validate:
-        print("ff")
         method = request_by_string[0]
         path = unquote(request_by_string[1].split('?')[0])
 
