@@ -10,7 +10,7 @@ def read_config(config_path):
         "port": 80,
         "queue": 8,
         "datasize": 1024,
-        "cpu_count": psutil.cpu_count(),
+        "cpu_limit": psutil.cpu_count(),
         "document_root": "/server/"
     }
     file_existed = os.path.exists(config_path)
@@ -27,6 +27,7 @@ def read_config(config_path):
                     logger.info(f"Config update: {key} : {'value'}")
                 except ValueError as config_error:
                     raise ValueError("Wrong config format")
+                default_config.update({key: value})
         else:
             try:
                 key, value = [value for value in line.split(" ") if len(value) >= 1]
