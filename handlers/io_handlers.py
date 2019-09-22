@@ -2,11 +2,8 @@ import io
 
 
 def open_io(filename):
-    b = bytearray(16)
-    f = io.open(filename, "rb")
-    readed = f.readinto(b)
-    if not readed:
+    with open(filename, "rb") as file:
+        data = file.read()
+    if not data:
         return None, True
-    file = f.read()
-    f.close()
-    return file, False
+    return data, False
