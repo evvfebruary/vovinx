@@ -1,4 +1,5 @@
 import os
+import re
 import psutil
 from handlers.io_handlers import open_io
 from handlers.logger import logger
@@ -19,22 +20,10 @@ def read_config(config_path):
     config_raw, error = open_io(config_path)
     if error:
         raise ValueError(f"Read file error:  {config_path}")
-
-    for line in [cnf_line for cnf_line in config_raw.decode("utf-8").split("\n") if len(cnf_line) > 2]:
-        if "#" in line:
-            for only_values in line.split("#")[:-1]:
-                try:
-                    key, value = [value for value in only_values.split(" ") if len(value) >= 1]
-                    logger.info(f"Config update: {key} : {'value'}")
-                except ValueError as config_error:
-                    raise ValueError("Wrong config format")
-                default_config.update({key: value})
-        else:
-            try:
-                key, value = [value for value in line.split(" ") if len(value) >= 1]
-                logger.info(f"Config update: {key} : {'value'}")
-            except ValueError as config_error:
-                raise ValueError("Wrong config format")
+    config_values = config_raw.decode("utf-8").split('\n')
+    for values in config_values:
+        if values:
+            key, value = re.search(r'\S* \S*', values).group(0).split(' ')
             default_config.update({key: value})
     default_config["binding"] = (default_config["address"], default_config["port"])
     default_config["cpu_limit"] = int(default_config["cpu_limit"])
