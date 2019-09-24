@@ -52,7 +52,6 @@ class Server:
 
     def handle_request(self, request):
         filepath = os.path.normpath(self.root + request.path)
-        # logger.info(f"Filepath {filepath}")
         # Prefix check
         if os.path.commonprefix([self.root, filepath]) != self.root:
             return self.answers["FORBIDDEN"]
@@ -101,12 +100,11 @@ class Server:
                         client_socket.close()
                         continue
                     request = http_handlers.request_handler(raw_request)
-                    # logger.info(request)
                     if not request.validated:
-                        response = self.answers["FORBIDDEN"]
+                       response = self.answers["FORBIDDEN"]
                     else:
                         response = self.handle_request(request)
-                    client_socket.send(bytes(response))
+                    client_socket.send(response)
                     client_socket.close()
             else:
                 logger.info("Cant fork anymore")
